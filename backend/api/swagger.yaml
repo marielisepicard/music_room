@@ -1,0 +1,3501 @@
+openapi: "3.0.0"
+info:
+  title: API Music Room Suricates 
+  description: This is a MusicRoom server with all the requests available to the users.
+    You can authentify yourself to get access to the requests.
+  version: 1.0.0
+servers:
+  - url: "http://62.34.5.191:45559/api"
+  - url: "http://localhost:45559/api"
+  - url: "http://localhost:46000/api"
+tags:
+- name: "auth"
+  description: "Authentication to MusicRoom"
+- name: "user"
+  description: "Everything about user"
+- name: "friends"
+  description: "Everything about friends"
+- name: "playlists"
+  description: "Everything about playlists"
+- name: "events"
+  description: "Everything about event"
+- name: "search"
+  description: "Searching routes"
+- name: "player"
+  description: "Player routes"
+paths:
+  /auth/signup:
+    post:
+      tags:
+      - "auth"
+      summary: "Create an account to MusicRoom"
+      operationId: "signup"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                pseudo:
+                  type: string
+              required:
+                - email
+                - password
+                - firstName
+                - lastName
+                - pseudo
+      responses:
+        201: 
+          description: |
+            __{code:__ '0'__}__ - `Success - User created - Validation email has been sent!`
+        400:
+          description: |
+            __{code:__ '0'__}__ - `Pseudo already assign to a Music Room account!`
+            
+            __{code:__ '1'__}__ - `Email already assign to a Music Room account!`
+
+            __{code:__ '2'__}__ - `Missing required field in body request!`
+        500: 
+          description: |
+           __{code:__ '0'__}__ - `Server error or Unhandled error!`
+      security: [] 
+  /auth/signup/google:
+    post:
+      tags:
+      - "auth"
+      summary: "Create an account to MusicRoom with Google"
+      operationId: "signupGoogle"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                MusicRoom_ID:
+                  type: string
+              required:
+                - token
+                - MusicRoom_ID
+      responses:
+        201:
+          description: |
+            __{code:__ '0'__}__ - `Success - User created - Validation email has been sent!`
+
+            __{code:__ '1'__}__ - `Success - User created - Account is already activated!`
+        400:
+          description: |
+            __{code:__ '0'__}__ - `Email already assign to a MusicRoom account!`
+          
+            __{code:__ '1'__}__ - `Missing token or MusicRoom_ID field!`
+
+            __{code:__ '2'__}__ - `Auth with Google failed, invalid token or client id!`
+        500: 
+          description: |
+           __{code:__ '0'__}__ - `Server error or Unhandled error!`
+      security: []
+  /auth/signup/facebook:
+    post:
+      tags:
+      - "auth"
+      summary: "Create an account to MusicRoom with Facebook"
+      operationId: "signupFacebook"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+              required:
+                - token
+      responses:
+        201:
+          description: |
+            __{code:__ '0'__}__ - `Success - User created - Account is already activated!`
+        400:
+          description: |
+            __{code:__ '0'__}__ - `Email already assign to a MusicRoom account!`
+          
+            __{code:__ '1'__}__ - `Missing token field!`
+
+            __{code:__ '2'__}__ - `Auth with Facebook failed, invalid token!`
+        500: 
+          description: |
+           __{code:__ '0'__}__ - `Server error or Unhandled error!`
+      security: []
+  /auth/login:
+    post:
+      tags:
+      - "auth"
+      summary: "Login to your MusicRoom account"
+      operationId: "login"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - password
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, userId:__ 'userId'__, token:__ 'token'__}__ - `Success user logged!`
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  userId:
+                    type: string
+                  token:
+                    type: string
+                example:
+                  code: "0"
+                  userId: 601014ae2fea2f1bbc9354fc
+                  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI3mDEwMTRhZTJmYmEyZjFiYmM5MzU0ZmMiLCJpYXQiOjE2MTE3NTY1MjQsImV4cCI6MTYxMTg0MjkyNH0.GWKNU6Ci0chgUOEsv09pqtmaXytSJKS-l-ZnALD1DXk
+        400:
+          description: |
+            __{code:__ '0'__}__ - `Missing email or password field!`
+
+            __{code:__ '1'__}__ - `Invalid user email!`
+
+            __{code:__ '2'__}__ - `Account is not activated yet!`
+
+            __{code:__ '3'__}__ - `Invalid password!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Server error or Unhandled error`
+      security: []
+  /auth/login/google:
+    post:
+      tags:
+      - "auth"
+      summary: "Login to your MusicRoom account with google"
+      operationId: "loginGoogle"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                MusicRoom_ID:
+                  type: string
+              required:
+                - token
+                - MusicRoom_ID
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, userId:__ 'userId'__, token:__ 'token'__}__ - `Success user logged!`
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  userId:
+                    type: string
+                  token:
+                    type: string
+                example:
+                  code: "0"
+                  userId: 601014ae2fea2f1bbc9354fc
+                  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI3mDEwMTRhZTJmYmEyZjFiYmM5MzU0ZmMiLCJpYXQiOjE2MTE3NTY1MjQsImV4cCI6MTYxMTg0MjkyNH0.GWKNU6Ci0chgUOEsv09pqtmaXytSJKS-l-ZnALD1DXk
+        400:
+          description: |
+            __{code:__ '0'__}__ - `Invalid user email!`
+
+            __{code:__ '1'__}__ - `Account is not activated yet!`
+
+            __{code:__ '2'__}__ - `Missing token or MusicRoom_ID field!`
+
+            __{code:__ '3'__}__ - `Auth with Google failed, invalid token or client id!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Server error or Unhandled error`
+      security: []
+  /auth/login/facebook:
+    post:
+      tags:
+      - "auth"
+      summary: "Login to your MusicRoom account with facebook"
+      operationId: "loginFacebook"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+              required:
+                - token
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, userId:__ 'userId'__, token:__ 'token'__}__ - `Success user logged!`
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  userId:
+                    type: string
+                  token:
+                    type: string
+                example:
+                  code: "0"
+                  userId: 601014ae2fea2f1bbc9354fc
+                  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI3mDEwMTRhZTJmYmEyZjFiYmM5MzU0ZmMiLCJpYXQiOjE2MTE3NTY1MjQsImV4cCI6MTYxMTg0MjkyNH0.GWKNU6Ci0chgUOEsv09pqtmaXytSJKS-l-ZnALD1DXk
+        400:
+          description: |
+            __{code:__ '0'__}__ - `Invalid user email!`
+
+            __{code:__ '1'__}__ - `Missing token or MusicRoom_ID field!`
+
+            __{code:__ '2'__}__ - `Auth with Google failed, invalid token or client id!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Server error or Unhandled error`
+      security: []
+  /auth/password:
+    post:
+      tags:
+      - "auth"
+      summary: "Send a mail to reset a password"
+      operationId: "sendMailResetPassword"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+              required:
+                - email
+      responses:
+        200: 
+          description: "Success - Mail send!"
+        500: 
+          description: "Error - Internal server error. Error object returned."
+      security: []
+  /me:
+    get:
+      tags:
+        - "user"
+      summary: "Get your user profile"
+      operationId: "getMyProfile"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, user:__ *UserObject*__}__ - `User profile successfully returned!`
+          content:
+           application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  example: "0"
+                user:
+                  $ref: '#/components/schemas/User'
+                  example:
+                    $ref: '#/components/examples/userExample'
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+  /users/{userId}/targetUser/{targetUserId}:
+    get:
+      tags:
+        - "user"
+      summary: "Get specified user profile - Depends on the relationship between users"
+      operationId: "getUserProfile"
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "ID of the user"
+        required: true
+        schema:
+          type: "string"
+      - name: "targetUserId"
+        in: "path"
+        description: "ID of the user you want to get profile informations"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, targetUser:__ *PublicProfileObject*__}__ - `Target user *public* profile successfully returned! No relation between users`
+          
+            __{code:__ '1'__, targetUser:__ *RestrictedProfileObject*__}__ - `Target user *restricted* profile successfully returned! Users are friends!`
+          content:
+           application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                targetUser:
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                    userInfo:
+                      type: object
+                      properties:
+                        musicalPreferences:
+                          type: array
+                          items:
+                            type: string
+                        firstName:
+                          type: string
+                        lastName:
+                          type: string
+                        pseudo:
+                          type: string
+                    userData:
+                      type: object
+                      properties:
+                        friendsId:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              _id:
+                                type: string
+                              userInfo:
+                                type: object
+                                properties:
+                                  pseudo:
+                                    type: string
+                        playlists:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              playlist:
+                                type: object
+                                properties:
+                                  public:
+                                    type: boolean
+                                  _id:
+                                    type: string
+                                  name:
+                                    type: string
+                        events:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              eventsId:
+                                type: object
+                                properties:
+                                  publicFlag:
+                                    type: boolean
+                                  _id:
+                                    type: string
+                                  name:
+                                    type: string
+            examples:
+              publicProfile:
+                value:
+                  code: '0'
+                  targetUser:
+                    _id: 654bf601d6df223658ba386e
+                    userInfo:
+                      pseudo: jackyTurbo2000
+              restrictedProfile:
+                value:
+                  code: '1'
+                  targetUser:
+                    _id: 601d654bf6df223658ba386f
+                    userInfo:
+                      musicalPreferences:
+                        - disco
+                        - salsa
+                      firstName: Jean-Claude
+                      lastName: Van-damme
+                      pseudo: JCVD
+                    userData:
+                      friendsId:
+                        - _id: 58ba3862601d64f2f6df2236
+                          userInfo:
+                            pseudo: kevinAdmasou
+                        - _id: 64f2f6df223658ba3862601d
+                          userInfo:
+                            pseudo: Lorenzo77
+                      playlists:
+                        - playlist:
+                            public: false
+                            _id: 60214a63f3423e0c103dfe0c
+                            name: yolo vald playlist 2
+                        - playlist:
+                            public: true
+                            _id: 23e0c103dfe0c60214a63f34
+                            name: Damso demsss
+                      events:
+                        - eventsId:
+                            publicFlag: false
+                            _id: 602107051eab9c3ba4e6a87a
+                            name: La fete au village
+                        - eventsId:
+                            publicFlag: true
+                            _id: b9c3ba4e6a87a602107051ea
+                            name: Feu feu feu
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Invalid target user id!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+  /users/{userId}/friendsInvitations:
+    get:
+      tags:
+        - "user"
+      summary: "Get your friends invitations"
+      operationId: "getFriendsInvitations"
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        responses:
+        200:
+          description: |
+            __{code:__ '0'__, friendsInvitations:__ *friendsInvitationsArray*__}__ - `Get an array of the friends invitations`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Couldn't find the user`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+  /users/{userId}/playlistsInvitations:
+    get:
+      tags:
+        - "user"
+      summary: "Get your playlists invitations"
+      operationId: "getPlaylistsInvitations"
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, playlistsInvitations:__ *playlistsInvitationArray*__}__ - `Get an array of the playlists invitations`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Couldn't find the user`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+  /users/{userId}/eventsInvitations:
+    get:
+      tags:
+        - "user"
+      summary: "Get your events invitations"
+      operationId: "getEventsInvitations"
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, eventsInvitations:__ *eventsInvitationsArray*__}__ - `Get an array of the events invitations`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Couldn't find the user`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+  /users/{userId}:
+    put:
+      tags:
+        - "user"
+      summary: "Update user information"
+      operationId: "updateUserInfo"
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "ID of the user"
+        required: true
+        schema:
+          type: "string"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                  description: "First Name of the user - __Authorized character: [a-zA-Zéèê -]__"
+                lastName:
+                  type: string
+                  description: "Last Name of the user - __Authorized character: [a-zA-Zéèê -]__"
+                pseudo:
+                  type: string
+                  description: "Pseudo of the user - __Authorized character: [a-zA-Z0-9]__"
+                birthDate:
+                  type: date-time
+                  description: "Birthdate of the user - __Authorized format: ISO DATE TIME [YYYY-MM-DD] || [YYYY-MM-DDThh:mmZ] || [YYYY-MM-DDThh:mm:ssZ] || [YYYY-MM-DDThh:mm:ss.sZ]__"
+                musicalPreferences:
+                  type: array
+                  description: "Musical genre - __Array of strings: ['salsa', 'jazz' ...]__"
+                  items:
+                    type: string
+                    enum: ['blues', 'country', 'disco', 'folk', 'funk', 'jazz', 'raï', 'rap', 'raggae', 'rock', 'salsa', 'soul', 'techno']
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, user:__ *userObject*__}__ - `User has been successfully updated!`
+          content:
+           application/json: 
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  example: "0"
+                user:  
+                  $ref: '#/components/schemas/User'
+                  example:
+                    $ref: '#/components/examples/userExample'
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Invalid firstName format!`
+
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `Invalid lastName format!`
+
+            __{code:__ '2'__, message:__ *errorMessage*__}__ - `Invalid pseudo format!`
+
+            __{code:__ '3'__, message:__ *errorMessage*__}__ - `Invalid birthDate format!`
+          
+            __{code:__ '4'__, message:__ *errorMessage*__}__ - `Invalid musical preferences!`
+            
+            __{code:__ '5'__, message:__ *errorMessage*__}__ - `Pseudo already exists!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+  /users/{userId}/attachGoogleAccount:
+    post:
+      tags:
+        - "user"
+      summary: "Attach the user's google account"
+      operationId: "attachgoogleAccount"
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "ID of the user"
+        required: true
+        schema:
+          type: "string"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                MusicRoom_ID:
+                  type: string
+              required:
+                - token
+                - MusicRoom_ID
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, user:__ *userObject*__}__ - `Google account has been successfully attached!`
+          content:
+           application/json: 
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  example: "0"
+                user:  
+                  $ref: '#/components/schemas/User'
+                  example:
+                    $ref: '#/components/examples/userExample'
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Missing token or MusicRoom_ID field!`
+
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `Auth with Google failed, invalid token or client id!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+  /users/{userId}/password:
+    post:
+      tags:
+      - "user"
+      summary: "Changes the password of the specified user"
+      operationId: "resetPassword"
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                currentPassword:
+                  type: string
+                  description: "User current password"
+                newPassword:
+                  type: string
+                  description: "User new password - __Min 5 char - Authorized char: [a-zA-Z0-9éèàêô,'!@# -]__"
+              required:
+                - currentPassword
+                - newPassword
+      responses:
+        200: 
+          description: "Password successfully updated!"
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Invalid current password!`
+
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `Invalid new password format!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500: 
+          description: "Error - Internal server error. Error object returned."
+  /users/{userId}/friends:
+    get:
+      tags:
+        - "friends"
+      summary: "Get the user's friends list"
+      operationId: "GetUsersFriendList"
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "ID of the user"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, friends:__ *friendsArray*__}__ - `User's friends list has been successfully returned!`
+          content:
+           application/json: 
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  example: "0"
+                friends:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                        format: hex
+                      pseudo:
+                        type:
+                          type: string
+                  example: [{_id: "daa31601801e64cf1894e040", pseudo: "jacky"},  {_id: "1894e0406daa3101801e64cf", pseudo: "tristaxx"}, {_id: "310181894e001e64cf406daa", pseudo: "yolo1005"}]
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+  /users/{userId}/friends/{friendId}/invite:
+    post:
+      tags:
+        - "friends"
+      summary: "Invite friend to your friends list"
+      operationId: "InviteFriend"
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "ID of the user"
+        required: true
+        schema:
+          type: "string"
+      - name: "friendId"
+        in: "path"
+        description: "ID of the friend"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, message:__ *successMessage*__}__ - `Friend has been successfully invited!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Invalid friend id!`
+
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `User cannot add himself as friend!`
+        
+            __{code:__ '2'__, message:__ *errorMessage*__}__ - `User already has this friend in his friends list!`
+        
+            __{code:__ '3'__, message:__ *errorMessage*__}__ - `User already has a pending invitation with this friend!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+  /users/{userId}/friends/{friendId}/acceptInvitation:
+    post:
+      tags:
+        - "friends"
+      summary: "Accept pending friend invitation of a user"
+      operationId: "acceptInvitationFriend"
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "ID of the user"
+        required: true
+        schema:
+          type: "string"
+      - name: "friendId"
+        in: "path"
+        description: "ID of the friend"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, message:__ *successMessage*__}__ - `Invitation has been accepted!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Invalid friend id!`
+
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `User cannot add himself as friend!`
+        
+            __{code:__ '2'__, message:__ *errorMessage*__}__ - `User already has this friend in his friends list!`
+        
+            __{code:__ '3'__, message:__ *errorMessage*__}__ - `There is no pending invitation from this user!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+  /users/{userId}/friends/{friendId}/refuseInvitation:
+    delete:
+      tags:
+        - "friends"
+      summary: "Refuse pending friend invitation of a user"
+      operationId: "refuseInvitationFriend"
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "ID of the user"
+        required: true
+        schema:
+          type: "string"
+      - name: "friendId"
+        in: "path"
+        description: "ID of the friend"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, message:__ *successMessage*__}__ - `Friend invitation has been refused successfully!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Invalid friend id!`
+
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `No pending invitation from friend!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+  /users/{userId}/friends/{friendId}:
+    delete:
+      tags:
+        - "friends"
+      summary: "Delete user from friends list"
+      operationId: "GetUsersFriendList"
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "ID of the user"
+        required: true
+        schema:
+          type: "string"
+      - name: "friendId"
+        in: "path"
+        description: "ID of the friend"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, message:__ *successMessage*__}__ - `Friend has been successfully deleted!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Invalid friend id!`
+
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `The friend ID specified does not match any of your friends!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+  /users/{userId}/playlists:
+    post:
+      tags:
+      - "playlists"
+      summary: "Create a new playlist"
+      operationId: "createPlaylist"
+      responses:
+        201:
+          description: |
+            __{code:__ '0'__, message:__ *successMessage*__}__ - `Playlist create!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Couldn't find the user!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                public:
+                  type: boolean
+                editionRight:
+                  type: boolean
+                musicalStyle:
+                  type: array
+                  description: "Musical style - __String: 'salsa', 'jazz' ...__"
+                  items:
+                    type: string
+                    enum: ['none', 'blues', 'country', 'disco', 'folk', 'funk', 'jazz', 'raï', 'rap', 'raggae', 'rock', 'salsa', 'soul', 'techno']
+              required:
+                - name
+    get:
+      tags:
+      - "playlists"
+      summary: "Get all user's playlists"
+      operationId: "getAllUserPlaylists"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, playlists:__ *playlistsArray*__}__ - `Get an array of the user's playlists!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Couldn't find the user!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+  /users/{userId}/followedPlaylists:
+    get:
+      tags:
+      - "playlists"
+      summary: "Get all user's followed playlists"
+      operationId: "getUserFollowedPlaylists"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, playlists:__ *playlistsArray*__}__ - `Get an array of the user's followed playlists!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Couldn't find the user!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+  /users/{userId}/associatedPlaylists:
+    get:
+      tags:
+      - "playlists"
+      summary: "Get all user's associated playlists"
+      operationId: "getUserAssociatedPlaylists"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, playlists:__ *playlistsArray*__}__ - `Get an array of the user's associated playlists!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Couldn't find the user!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+  /users/{userId}/createdPlaylists:
+    get:
+      tags:
+      - "playlists"
+      summary: "Get all user's created playlists"
+      operationId: "getUserCreatedPlaylists"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, playlists:__ *playlistsArray*__}__ - `Get an array of the user's created playlists!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Couldn't find the user!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+  /users/{userId}/publicPlaylists:
+    get:
+      tags:
+      - "playlists"
+      summary: "Get all user's public playlists"
+      operationId: "getUserPublicPlaylists"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, playlists:__ *playlistsArray*__}__ - `Get an array of the user's public playlists!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Couldn't find the user!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+      security: []
+  /users/{userId}/playlists/{playlistId}:
+    delete:
+      tags:
+      - "playlists"
+      summary: "Delete the specified playlist"
+      operationId: "deletePlaylist"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, message:__ *successMessage*__}__ - `Playlist deleted!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Couldn't find the playlist!`
+
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `The user doesn't have the rights to delete this playlist!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+        - name: "playlistId"
+          in: "path"
+          description: "ID of the playlist"
+          required: true
+          schema:
+            type: "string"
+  /users/{userId}/playlists/{playlistId}/changeMusicalStyle:
+    put:
+      tags:
+      - "playlists"
+      summary: "Change the musical style of the specified playlist"
+      operationId: "changeMusicalStyle"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, message:__ *successMessage*__}__ - `Playlist musical style changed!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Couldn't find the playlist!`
+
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `The user doesn't have the rights to change the musical rights!`
+
+            __{code:__ '2'__, message:__ *errorMessage*__}__ - `The musical style isn't valid!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+        - name: "playlistId"
+          in: "path"
+          description: "ID of the playlist"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                musicalStyle:
+                  type: array
+                  description: "Musical style - __String: 'salsa', 'jazz' ...__"
+                  items:
+                    type: string
+                    enum: ['none', 'blues', 'country', 'disco', 'folk', 'funk', 'jazz', 'raï', 'rap', 'raggae', 'rock', 'salsa', 'soul', 'techno']
+  /users/{userId}/playlists/{playlistId}/public:
+    post:
+      tags:
+      - "playlists"
+      summary: "Make the specified playlist public"
+      operationId: "setPlaylistPublic"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, message:__ *successMessage*__}__ - `Playlist set public!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Couldn't find the playlist!`
+
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `The user doesn't have the rights to set this playlist public!`
+
+            __{code:__ '2'__, message:__ *errorMessage*__}__ - `The playlist is already public!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+        - name: "playlistId"
+          in: "path"
+          description: "ID of the playlist"
+          required: true
+          schema:
+            type: "string"
+  /users/{userId}/playlists/{playlistId}/private:
+    post:
+      tags:
+      - "playlists"
+      summary: "Make the specified playlist private"
+      operationId: "setPlaylistPrivate"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, message:__ *successMessage*__}__ - `Playlist set private!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Couldn't find the playlist!`
+
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `The user doesn't have the rights to set this playlist private!`
+
+            __{code:__ '2'__, message:__ *errorMessage*__}__ - `The playlist is already private!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+        - name: "playlistId"
+          in: "path"
+          description: "ID of the playlist"
+          required: true
+          schema:
+            type: "string"
+  /users/{userId}/playlists/{playlistId}/switchEditionRight:
+    put:
+      tags:
+      - "playlists"
+      summary: "Switch the edition right of the playlist"
+      operationId: "switchEditionRight"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, message:__ *successMessage*__, editionRight:__ 0__}__ - `Edition right set to 'false'!`
+          
+            __{code:__ '1'__, message:__ *successMessage*__, editionRight:__ 1__}__ - `Edition right set to 'true'!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Couldn't find the playlist!`
+
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `The user doesn't have the rights to change the edition's right!`
+
+            __{code:__ '2'__, message:__ *errorMessage*__}__ - `The playlist is private!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+        - name: "playlistId"
+          in: "path"
+          description: "ID of the playlist"
+          required: true
+          schema:
+            type: "string"
+  /users/{userId}/playlists/{playlistId}/associatedUser/{associatedUserId}/switchEditionRight:
+    post:
+      tags:
+      - "playlists"
+      summary: "Switch the edition right of the associated user"
+      operationId: "switchEditionRightAssociatedUser"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, message:__ *successMessage*__, editionRight:__ 0__}__ - `Edition right of the associated set to 'false'!`
+          
+            __{code:__ '1'__, message:__ *successMessage*__, editionRight:__ 1__}__ - `Edition right of the associated set to 'true'!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Couldn't find the playlist!`
+
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `Couldn't find the user!`
+
+            __{code:__ '2'__, message:__ *errorMessage*__}__ - `Couldn't find the associatedUser!`
+
+            __{code:__ '3'__, message:__ *errorMessage*__}__ - `The user doesn't have this right!`
+
+            __{code:__ '4'__, message:__ *errorMessage*__}__ - `The associatedUser is not associated to this playlist!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+        - name: "playlistId"
+          in: "path"
+          description: "ID of the playlist"
+          required: true
+          schema:
+            type: "string"
+        - name: "associatedUserId"
+          in: "path"
+          description: "ID of the associated user"
+          required: true
+          schema:
+            type: "string"
+  /users/{userId}/playlists/{playlistId}/invite/friend/{friendId}:
+    post:
+      tags:
+      - "playlists"
+      summary: "Invite a friend to the specified playlist"
+      operationId: "sendInvitationToPlaylist"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, message:__ *successMessage*__}__ - `Invitation to the playlist sent to the friend!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Couldn't find the playlist!`
+
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `Couldn't find the user!`
+
+            __{code:__ '2'__, message:__ *errorMessage*__}__ - `Couldn't find the friend!`
+
+            __{code:__ '3'__, message:__ *errorMessage*__}__ - `The user doesn't have the right to invite someone to this playlist!`
+
+            __{code:__ '4'__, message:__ *errorMessage*__}__ - `The friend is already associated to this playlist!`
+
+            __{code:__ '5'__, message:__ *errorMessage*__}__ - `The friend has already a pending invitation to this playlist!`
+            
+            __{code:__ '6'__, message:__ *errorMessage*__}__ - `The friend is not in your friends list!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+        - name: "playlistId"
+          in: "path"
+          description: "ID of the playlist"
+          required: true
+          schema:
+            type: "string"
+        - name: "friendId"
+          in: "path"
+          description: "ID of the friend"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                editionRight:
+                  type: boolean
+  /users/{userId}/playlists/{playlistId}/acceptInvitation:
+    post:
+      tags:
+      - "playlists"
+      summary: "Accept invitation to the specified playlist"
+      operationId: "acceptInvitationToPlaylist"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, message:__ *successMessage*__}__ - `Invitation to the playlist accepted!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Couldn't find the playlist!`
+
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `Couldn't find the user!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+        - name: "playlistId"
+          in: "path"
+          description: "ID of the playlist"
+          required: true
+          schema:
+            type: "string"
+  /users/{userId}/playlists/{playlistId}/refuseInvitation:
+    post:
+      tags:
+      - "playlists"
+      summary: "Refuses invitation to the specified playlist"
+      operationId: "refuseInvitationToPlaylist"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, message:__ *successMessage*__}__ - `Invitation to the playlist refused!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Couldn't find the playlist!`
+
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `Couldn't find the user!`
+
+            __{code:__ '2'__, message:__ *errorMessage*__}__ - `The user doesn't have a pending invitation to this playlist!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+        - name: "playlistId"
+          in: "path"
+          description: "ID of the playlist"
+          required: true
+          schema:
+            type: "string"
+  /users/{userId}/playlists/{playlistId}/associatedUser/{associatedUserId}:
+    delete:
+      tags:
+      - "playlists"
+      summary: "Remove the associated user to the specified playlist"
+      operationId: "removeAssociatedUserFromPlaylist"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, message:__ *successMessage*__}__ - `Associated user removed!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Couldn't find the playlist!`
+
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `Couldn't find the user!`
+
+            __{code:__ '2'__, message:__ *errorMessage*__}__ - `Couldn't find the associatedUser!`
+
+            __{code:__ '3'__, message:__ *errorMessage*__}__ - `The user doesn't have this right!`
+
+            __{code:__ '4'__, message:__ *errorMessage*__}__ - `The creator must delete the playlist to leave it!`
+            
+            __{code:__ '5'__, message:__ *errorMessage*__}__ - `The associatedUser is not associated to this playlist!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+        - name: "playlistId"
+          in: "path"
+          description: "ID of the playlist"
+          required: true
+          schema:
+            type: "string"
+        - name: "associatedUserId"
+          in: "path"
+          description: "ID of the associatedUser"
+          required: true
+          schema:
+            type: "string"
+  /users/{userId}/playlists/{playlistId}/follow:
+    post:
+      tags:
+      - "playlists"
+      summary: "Follow the specified playlist"
+      operationId: "followPlaylist"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, message:__ *successMessage*__}__ - `Playlist followed!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Couldn't find the user!`
+
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `Couldn't find the playlist!`
+
+            __{code:__ '2'__, message:__ *errorMessage*__}__ - `Playlist is private!`
+
+            __{code:__ '3'__, message:__ *errorMessage*__}__ - `The user is already the creator of the playlist!`
+
+            __{code:__ '4'__, message:__ *errorMessage*__}__ - `The playlist is already followed!`
+
+            __{code:__ '5'__, message:__ *errorMessage*__}__ - `The playlist is already associated!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+        - name: "playlistId"
+          in: "path"
+          description: "ID of the playlist"
+          required: true
+          schema:
+            type: "string"
+  /users/{userId}/playlists/{playlistId}/unfollow:
+    post:
+      tags:
+      - "playlists"
+      summary: "Unfollow the specified playlist"
+      operationId: "unfollowPlaylist"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, message:__ *successMessage*__}__ - `Playlist unfollowed!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Couldn't find the user!`
+
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `Couldn't find the playlist!`
+
+            __{code:__ '2'__, message:__ *errorMessage*__}__ - `The playlist isn't followed yet!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+        - name: "playlistId"
+          in: "path"
+          description: "ID of the playlist"
+          required: true
+          schema:
+            type: "string"
+  /playlists/{playlistId}/tracks/{trackId}:
+    post:
+      tags:
+      - "playlists"
+      summary: "Add track to the specified playlist"
+      operationId: "addTrack"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, message:__ *successMessage*__}__ - `Track added!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Couldn't find the user!`
+
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `Couldn't find the playlist!`
+
+            __{code:__ '2'__, message:__ *errorMessage*__}__ - `The user doesn't have the rights to add track in this playlist!`
+
+            __{code:__ '3'__, message:__ *errorMessage*__}__ - `Track already in playlist!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+      parameters:
+        - name: "playlistId"
+          in: "path"
+          description: "ID of the playlist"
+          required: true
+          schema:
+            type: "string"
+        - name: "trackId"
+          in: "path"
+          description: "Spotify's ID of the song"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                duration:
+                  type: integer
+                  format: int32
+              required:
+                - userId
+  /playlists/{playlistId}/changeTracksOrder:
+    post:
+      tags:
+      - "playlists"
+      summary: "Change track order of the specified playlist"
+      operationId: "changeOrderTrack"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, message:__ *successMessage*__}__ - `Track added!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Couldn't find the user!`
+
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `Couldn't find the playlist!`
+
+            __{code:__ '2'__, message:__ *errorMessage*__}__ - `The user doesn't have the rights to edit this playlist!`
+
+            __{code:__ '3'__, message:__ *errorMessage*__}__ - `Old index out of range!`
+
+            __{code:__ '4'__, message:__ *errorMessage*__}__ - `New index out of range!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+      parameters:
+        - name: "playlistId"
+          in: "path"
+          description: "ID of the playlist"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                oldIndex:
+                  type: int
+                newIndex:
+                  type: int
+              required:
+                - userId
+                - oldIndex
+                - newIndex
+  /playlists/{playlistId}:
+    get:
+      tags:
+      - "playlists"
+      summary: "Get the specified playlist"
+      operationId: "getPlaylist"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, playlist:__ *playlistObject*__}__ - `Get the specified playlist`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Couldn't find the playlist!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+      parameters:
+        - name: "playlistId"
+          in: "path"
+          description: "ID of the playlist"
+          required: true
+          schema:
+            type: "string"
+  /playlists/{playlistId}/tracks:
+    get:
+      tags:
+      - "playlists"
+      summary: "Get all tracks of the specified playlist"
+      operationId: "getPlaylistTracks"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, tracks:__ *tracksArray*__}__ - `Get an array with the tracks of the playlist`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Couldn't find the playlist!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+      parameters:
+        - name: "playlistId"
+          in: "path"
+          description: "ID of the playlist"
+          required: true
+          schema:
+            type: "string"
+    delete:
+      tags:
+      - "playlists"
+      summary: "Delete track to the specified playlist"
+      operationId: "deleteTrack"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, message:__ *successMessage*__}__ - `Track deleted!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Couldn't find the user!`
+
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `Couldn't find the playlist!`
+
+            __{code:__ '2'__, message:__ *errorMessage*__}__ - `The user doesn't have the rights to delete track in this playlist!`
+
+            __{code:__ '3'__, message:__ *errorMessage*__}__ - `Index out of range!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+      parameters:
+        - name: "playlistId"
+          in: "path"
+          description: "ID of the playlist"
+          required: true
+          schema:
+            type: "string"
+        - name: "userId"
+          in: "query"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+        - name: "index"
+          in: "query"
+          description: "Index of the track to delete"
+          required: true
+          schema:
+            type: "integer"
+  /playlists:
+    get:
+      tags:
+      - "playlists"
+      summary: "Get all public playlists"
+      operationId: "getAllPublicPlaylists"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, playlists:__ *playlistsArray*__}__ - `Get all the public playlists`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+      security: []
+  /me/events:
+    get:
+      tags:
+      - "events"
+      summary: "Get a list of all your events"
+      operationId: "getYourEvents"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, event:__ *arrayOfEventsObject*__}__ - `User events successfully returned!`
+          content:
+           application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  example: "0"
+                event:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/PhysicalEvent'
+                  example: [$ref: '#/components/examples/numericalEventExample', $ref: '#/components/examples/privateEventExample']
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+  /events:
+    get:
+      tags:
+      - "events"
+      summary: "Get a list of all public events"
+      operationId: "getPublicEvents"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, event:__ *arrayOfEventsObject*__}__ - `Public events successfully returned!`
+          content:
+           application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  example: "0"
+                event:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/PhysicalEvent'
+                  example: [$ref: '#/components/examples/publicEventExample', $ref: '#/components/examples/numericalEventExample']
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+      security: []
+    post:
+      tags:
+      - "events"
+      summary: "Create a new event"
+      operationId: "createEvent"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  description: "Name of the event - __Authorized character: [a-zA-Z0-9éèàêô,'!- ]__"
+                  type: string
+                visibility:
+                  description: "Visibility of the event - __'public':*publicEvent* || 'private':*privateEvent*__  - *Default value: __public__*"
+                  type: string
+                  enum: [ public, private]
+                votingPrerequisites:
+                  description: "If true, participants should get a special right to vote track - __'true'  || 'false__ - *Default value: __false__*"
+                  type: boolean
+                physicalEvent:
+                  description: "If true, users must be present at the event, and the event must have started to participate - __'true'  || 'false__ - *Default value: __false__*"
+                  type: boolean
+                place:
+                  description: "Location of the event *(Will only be considered if physicalEvent is set to true)* - __Authorized character: [a-zA-Zéèàêô0-9,'- ]__  - *Default value: __null__*"
+                  type: string
+                  format: address
+                beginDate:
+                  description: "Start of the event *(Will only be considered if physicalEvent is set to true)* - __Authorized format: ISO DATE TIME [YYYY-MM-DD] || [YYYY-MM-DDThh:mmZ] || [YYYY-MM-DDThh:mm:ssZ] || [YYYY-MM-DDThh:mm:ss.sZ]__ - *Default value: __null__*"
+                  type: string
+                  format: date
+                endDate:
+                  description: "End of the event *(Will only be considered if physicalEvent is set to true)* - __Authorized format: ISO DATE TIME [YYYY-MM-DD] || [YYYY-MM-DDThh:mmZ] || [YYYY-MM-DDThh:mm:ssZ] || [YYYY-MM-DDThh:mm:ss.sZ]__  - *Default value: __null__*"
+                  type: string
+                  format: date
+              required:
+                - name
+      responses:
+        201:
+          description: |
+            __{code:__ '0'__, event:__ *eventObject*__}__ - `Event successfully created!`
+          content:
+           application/json: 
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  example: "0"
+                event:
+                  $ref: '#/components/schemas/NumericalEvent'
+            examples:
+              numericalEvent:
+                $ref: '#/components/examples/numericalEventExample'
+              physicalEvent:
+                $ref: '#/components/examples/physicalEventExample'
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Invalid name format!`
+
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `Invalid visibility format!`
+
+            __{code:__ '2'__, message:__ *errorMessage*__}__ - `Invalid votingPrerequisites format!`
+
+            __{code:__ '3'__, message:__ *errorMessage*__}__ - `Invalid physicalEvent format!`
+
+            __{code:__ '4'__, message:__ *errorMessage*__}__ - `Invalid place format!`
+
+            __{code:__ '5'__, message:__ *errorMessage*__}__ - `Cannot find place location!`
+
+            __{code:__ '6'__, message:__ *errorMessage*__}__ - `Invalid beginDate format!`
+            
+            __{code:__ '7'__, message:__ *errorMessage*__}__ - `Invalid endDate format!`
+
+            __{code:__ '8'__, message:__ *errorMessage*__}__ - `End date must be after begin date!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+  /events/{eventId}:
+    post:
+      tags:
+      - "events"
+      summary: "Update a specified event"
+      operationId: "updateEvent"
+      parameters:
+        - name: "eventId"
+          in: "path"
+          description: "ID of the event"
+          required: true
+          schema:
+            type: "string"
+            format: "hex"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  description: "Name of the event - __Authorized character: [a-zA-Z0-9éèàêô,'!- ]__"
+                  type: string
+                visibility:
+                  description: "Visibility of the event - __'public':*publicEvent* || 'private':*privateEvent*__  - *Default value: __public__*"
+                  type: string
+                  enum: [ public, private]
+                votingPrerequisites:
+                  description: "If true, participants should get a special right to vote track - __'true'  || 'false__ - *Default value: __false__*"
+                  type: boolean
+                status:
+                  description: "Status of the event - __'started'  || 'notSarted' || 'terminated'__"
+                  type: string
+                physicalEvent:
+                  description: "If true, users must be present at the event, and the event must have started to participate - __'true'  || 'false__ - *Default value: __false__*"
+                  type: boolean
+                place:
+                  description: "Location of the event *(Will only be considered if physicalEvent is set to true)* - __Authorized character: [a-zA-Zéèàêô0-9,'- ]__  - *Default value: __null__*"
+                  type: string
+                  format: address
+                beginDate:
+                  description: "Start of the event *(Will only be considered if physicalEvent is set to true)* - __Authorized format: ISO DATE TIME [YYYY-MM-DD] || [YYYY-MM-DDThh:mmZ] || [YYYY-MM-DDThh:mm:ssZ] || [YYYY-MM-DDThh:mm:ss.sZ]__ - *Default value: __null__*"
+                  type: string
+                  format: date
+                endDate:
+                  description: "End of the event *(Will only be considered if physicalEvent is set to true)* - __Authorized format: ISO DATE TIME [YYYY-MM-DD] || [YYYY-MM-DDThh:mmZ] || [YYYY-MM-DDThh:mm:ssZ] || [YYYY-MM-DDThh:mm:ss.sZ]__  - *Default value: __null__*"
+                  type: string
+                  format: date
+                musicalStyle:
+                  type: array
+                  description: "Musical genre - __Array of strings: ['salsa', 'jazz' ...]__"
+                  items:
+                    type: string
+                    enum: ['none', 'blues', 'country', 'disco', 'folk', 'funk', 'jazz', 'raï', 'rap', 'raggae', 'rock', 'salsa', 'soul', 'techno']
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, event:__ *eventObject*__}__ - `Event successfully updated!`
+          content:
+           application/json: 
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  example: "0"
+                event:
+                  $ref: '#/components/schemas/NumericalEvent'
+            examples:
+              numericalEvent:
+                $ref: '#/components/examples/numericalEventExample'
+              physicalEvent:
+                $ref: '#/components/examples/physicalEventExample'
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Invalid event id!`
+            
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `Invalid name format!`
+
+            __{code:__ '2'__, message:__ *errorMessage*__}__ - `Invalid visibility format!`
+
+            __{code:__ '3'__, message:__ *errorMessage*__}__ - `Invalid votingPrerequisites format!`
+
+            __{code:__ '4'__, message:__ *errorMessage*__}__ - `Invalid physicalEvent format!`
+
+            __{code:__ '5'__, message:__ *errorMessage*__}__ - `Invalid place format!`
+
+            __{code:__ '6'__, message:__ *errorMessage*__}__ - `Cannot find place location!`
+
+            __{code:__ '7'__, message:__ *errorMessage*__}__ - `Invalid beginDate format!`
+            
+            __{code:__ '8'__, message:__ *errorMessage*__}__ - `Invalid endDate format!`
+
+            __{code:__ '9'__, message:__ *errorMessage*__}__ - `End date must be after begin date!`
+
+            __{code:__ '10'__, message:__ *errorMessage*__}__ - `Invalid musical preferences!` 
+
+            __{code:__ '11'__, message:__ *errorMessage*__}__ - `Invalid status format!` 
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+    delete:
+      tags:
+      - "events"
+      summary: "Delete an event"
+      operationId: "deleteEvent"
+      parameters:
+        - name: "eventId"
+          in: "path"
+          description: "ID of the event"
+          required: true
+          schema:
+            type: "string"
+            format: "hex"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, event:__ *successMessage*__}__ - `Event successfully deleted!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Invalid event id!`
+
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `User should be admin to delete the event!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+  /events/{eventId}/setStatus:
+    post:
+      tags:
+        - "events"
+      summary: "Update the status of an event"
+      operationId: "setEventStatus"
+      parameters:
+        - name: "eventId"
+          in: "path"
+          description: "ID of the event"
+          required: true
+          schema:
+            type: "string"
+            format: "hex"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                eventStatus:
+                  description: "Status of the event - __Authorized character: [a-zA-Z0-9éèàêô,'!- ]__"
+                  type: string
+                  enum: [ notStarted, started, terminated]
+                  required: true
+      responses:
+        201:
+          description: |
+            __{code:__ '0'__, message:__ *successMessage*__}__ - `Successfully updated event status!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Invalid event id!`
+
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Invalid event status!`
+
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `User should be admin to set event status!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+  /events/{eventId}/tracks:
+    get:
+      tags:
+      - "events"
+      summary: "Get sorted track list from specified event"
+      operationId: "getSortedTrackListFromEvent"
+      parameters:
+        - name: "eventId"
+          in: "path"
+          description: "ID of the event"
+          required: true
+          schema:
+            type: "string"
+            format: "hex"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, message:__ *trackArray*__}__ - `Sorted track list successfully returned!`
+          content:
+           application/json: 
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  example: "0"
+                tracks:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Tracks'
+                  example: [$ref: '#/components/examples/TrackExample1', $ref: '#/components/examples/TrackExample2', $ref: '#/components/examples/TrackExample3', $ref: '#/components/examples/TrackExample4']
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Invalid event id!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+  /events/{eventId}/tracks/{trackId}:
+    post:
+      tags:
+      - "events"
+      summary: "Add track to the event"
+      operationId: "addTrackEvent"
+      parameters:
+        - name: "eventId"
+          in: "path"
+          description: "ID of the event"
+          required: true
+          schema:
+            type: "string"
+            format: "hex"
+        - name: "trackId"
+          in: "path"
+          description: "ID of the spotify track you want to add"
+          required: true
+          schema:
+            type: "string"
+            format: "hex"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                trackDuration:
+                  type: string
+                  description: "Duration of the track"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, message:__ *successMessage*__}__ - `Track successfully added to the event!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Invalid event id!`
+
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `Invalid track id!`
+
+            __{code:__ '2'__, message:__ *errorMessage*__}__ - `User should be admin to add track to the event!`
+            
+            __{code:__ '3'__, message:__ *errorMessage*__}__ - `The track has already been added to the event!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+    delete:
+      tags:
+      - "events"
+      summary: "Delete track from the event"
+      operationId: "deleteTrackEvent"
+      parameters:
+        - name: "eventId"
+          in: "path"
+          description: "ID of the event"
+          required: true
+          schema:
+            type: "string"
+            format: "hex"
+        - name: "trackId"
+          in: "path"
+          description: "ID of the spotify track you want to add"
+          required: true
+          schema:
+            type: "string"
+            format: "hex"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, message:__ *successMessage*__}__ - `Track successfully deleted from the event!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Invalid event id!`
+
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `The track is not in the event!`
+
+            __{code:__ '2'__, message:__ *errorMessage*__}__ - `User should be admin to delete track from the event!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+  /events/{eventId}/tracks/{trackId}/vote:
+    post:
+      tags:
+      - "events"
+      summary: "Vote track in the event"
+      operationId: "voteTrackEvent"
+      parameters:
+        - name: "eventId"
+          in: "path"
+          description: "ID of the event"
+          required: true
+          schema:
+            type: "string"
+            format: "hex"
+        - name: "trackId"
+          in: "path"
+          description: "ID of the spotify track you want to vote"
+          required: true
+          schema:
+            type: "string"
+            format: "hex"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                lat:
+                  description: "Latitude of the user"
+                  type: "number"
+                  format: "float"
+                long:
+                  description: "Longitude of the user"
+                  type: "number"
+                  format: "float"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, message:__ *successMessage*__}__ - `Track successfully vote!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Invalid event id!`
+
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `Invalid track id!`
+
+            __{code:__ '2'__, message:__ *errorMessage*__}__ - `Invalid coordinates format!`
+
+            __{code:__ '3'__, message:__ *errorMessage*__}__ - `User should join event before voting for tracks!`
+          
+            __{code:__ '4'__, message:__ *errorMessage*__}__ - `User should get special right to vote for tracks in this event!`
+
+            __{code:__ '5'__, message:__ *errorMessage*__}__ - `User must be located at the event to vote!`
+
+            __{code:__ '6'__, message:__ *errorMessage*__}__ - `Event must have started before user can vote!`
+            
+            __{code:__ '7'__, message:__ *errorMessage*__}__ - `Event is terminated!`
+                      
+            __{code:__ '8'__, message:__ *errorMessage*__}__ - `Track is not in the event!`
+
+            __{code:__ '9'__, message:__ *errorMessage*__}__ - `User has already voted for this track!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+  /events/{eventId}/tracks/{trackId}/unvote:
+    post:
+      tags:
+      - "events"
+      summary: "Unvote track in the event"
+      operationId: "unvoteTrackEvent"
+      parameters:
+        - name: "eventId"
+          in: "path"
+          description: "ID of the event"
+          required: true
+          schema:
+            type: "string"
+            format: "hex"
+        - name: "trackId"
+          in: "path"
+          description: "ID of the spotify track you want to unvote"
+          required: true
+          schema:
+            type: "string"
+            format: "hex"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                lat:
+                  description: "Latitude of the user"
+                  type: "number"
+                  format: "float"
+                long:
+                  description: "Longitude of the user"
+                  type: "number"
+                  format: "float"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, message:__ *successMessage*__}__ - `Track vote successfully deleted!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Invalid event id!`
+
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `Invalid track id!`
+
+            __{code:__ '2'__, message:__ *errorMessage*__}__ - `Invalid coordinates format!`
+
+            __{code:__ '3'__, message:__ *errorMessage*__}__ - `User should join event before voting for tracks!`
+
+            __{code:__ '4'__, message:__ *errorMessage*__}__ - `User should get special right to vote for tracks in this event!`
+            
+            __{code:__ '5'__, message:__ *errorMessage*__}__ - `User must be located at the event to vote!`
+
+            __{code:__ '6'__, message:__ *errorMessage*__}__ - `Event must have started before user can vote!`
+            
+            __{code:__ '7'__, message:__ *errorMessage*__}__ - `Event is terminated!`
+                      
+            __{code:__ '8'__, message:__ *errorMessage*__}__ - `Track is not in the event!`
+
+            __{code:__ '9'__, message:__ *errorMessage*__}__ - `User did not vote for this track before!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+  /users/{userId}/events/{eventId}:
+    get:
+      tags:
+      - "events"
+      summary: "Get a specified event"
+      operationId: "GetSpecifiedEvent"
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+            format: "hex"
+        - name: "eventId"
+          in: "path"
+          description: "ID of the event"
+          required: true
+          schema:
+            type: "string"
+            format: "hex"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, message:__ *eventObject*__}__ - `Successfully returned event!`
+          content:
+           application/json: 
+            schemas:
+              type: object
+              properties:
+                code:
+                  type: string
+                event:  
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                    name:
+                      type: string
+                    publicFlag:
+                      type: boolean
+                    votingPrerequisites:
+                      type: boolean
+                    physicalEvent:
+                      type: boolean
+                    place:
+                      type: string
+                    geoLoc:
+                      type: object
+                      properties:
+                        Long:
+                          type: number
+                          format: float
+                        Lat:
+                            type: number
+                            format: float
+                    beginDate:
+                      type: string
+                      format: date-time
+                    endDate:
+                      type: string
+                      format: date-time
+                    guestsNumber:
+                      type: number
+                      format: int32
+                    guestsInfo:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          userId:
+                            type: object
+                            properties:
+                              _id:
+                                type: string
+                              userInfo:
+                                type: object
+                                properties:
+                                  pseudo:
+                                    type: string           
+                          right:
+                            type: string
+                    tracksInfo:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          trackId:
+                            type: string
+                          votesNumber:
+                            type: number
+                            format: int32
+            example:
+              code: '0'
+              event:
+                geoLoc:
+                  Lat: 48.856832
+                  Long: 2.351347
+                publicFlag: false
+                votingPrerequisites: true
+                physicalEvent: true
+                guestsNumber: 2
+                _id: 60104b6b5bb03207e06857d5
+                name: Fête de la musique!
+                place: Place de l'Hotêl de ville Paris 75004
+                beginDate: 2021-06-21T20:00:00.000+00:00
+                endDate: 2021-06-21T23:00:00.000+00:00
+                guestsInfo:
+                  - _id: 60104b6b5bb03207e06857d5
+                    userId:
+                      _id: 601014ae2fba2f1bbc9354fc
+                      userInfo:
+                        pseudo: tristax
+                    right: admin
+                  - _id: 60104b6b5bb03207e06857d5
+                    userId:
+                      _id: fba2f1bbc9354fc601014ae2
+                      userInfo:
+                        pseudo: tristax
+                    right: guest
+                tracksInfo:
+                  - _id: 60104b6b5bb03207e06857d5
+                    trackId: 601014ae2fba2f1bbc9354fc
+                    votesNumber: 750
+                  - _id: 60104b6b5bb03207e06857d5
+                    trackId: 601014ae2fba2f1bbc9354fc
+                    votesNumber: 264
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Invalid event id!`
+
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `User cannot get private event!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+  /users/{userId}/events/{eventId}/userRight:
+    get:
+      tags:
+      - "events"
+      summary: "Get user right of a specified event"
+      operationId: "GetUserRightFromSpecifiedEvent"
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+            format: "hex"
+        - name: "eventId"
+          in: "path"
+          description: "ID of the event"
+          required: true
+          schema:
+            type: "string"
+            format: "hex"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, userRight:__ *userRightCode*__}__ - `(userRightCode=-1)->notMemberUser || (userRightCode=0)->guestUser || (userRightCode=1)->superUser || (userRightCode=2)->adminUser`
+          content:
+           application/json: 
+            schemas:
+              type: object
+              properties:
+                code:
+                  type: string
+                  example: '0'
+                userRight:  
+                  type: int
+            examples:
+              adminUser:
+                code: '0'
+                userRight: 2
+              superUser:
+                code: '0'
+                userRight: 1
+              guestUser:
+                code: '0'
+                userRight: 0
+              notMemberUser:
+                code: '0'
+                userRight: -1
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Invalid event id!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+  /users/{userId}/events/{eventId}/join:
+    post:
+      tags:
+      - "events"
+      summary: "Join an event"
+      operationId: "JoinEvent"
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+            format: "hex"
+        - name: "eventId"
+          in: "path"
+          description: "ID of the event"
+          required: true
+          schema:
+            type: "string"
+            format: "hex"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, message:__ *successMessage*__}__ - `Successfully joined event!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Invalid event id!`
+
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `Cannot add user to private event!`
+
+            __{code:__ '2'__, message:__ *errorMessage*__}__ - `User has already joined event!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+  /users/{userId}/events/{eventId}/leave:
+    delete:
+      tags:
+      - "events"
+      summary: "Leave an event"
+      operationId: "LeaveEvent"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, message:__ *successMessage*__}__ - `Event left successfully!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Invalid event id!`
+
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `Admin user cannot leave the event. The event must have at least one admin user!`
+
+            __{code:__ '2'__, message:__ *errorMessage*__}__ - `User is not in the event!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+            format: "hex"
+        - name: "eventId"
+          in: "path"
+          description: "ID of the event"
+          required: true
+          schema:
+            type: "string"
+            format: "hex"
+  /users/{userId}/events/{eventId}/invite/friends/{friendId}:
+    post:
+      tags:
+      - "events"
+      summary: "Invite your friends to the event"
+      operationId: "InviteFriendsEvent"
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+            format: "hex"
+        - name: "eventId"
+          in: "path"
+          description: "ID of the event"
+          required: true
+          schema:
+            type: "string"
+            format: "hex"
+        - name: "friendId"
+          in: "path"
+          description: "ID of the friend"
+          required: true
+          schema:
+            type: "string"
+            format: "hex"
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                friendRight:
+                  type: string
+                  enum: [guest, superUser, admin]
+                  description: "__'guest':*low priviledge* || 'superUser':*medium priviledge* || 'admin':*high priviledge*__"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, message:__ *successMessage*__}__ - `Friend has been successfully invited to the event!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Invalid friend id!`
+
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `Invalid event id!`
+
+            __{code:__ '2'__, message:__ *errorMessage*__}__ - `Cannot invite yourself to event!`
+            
+            __{code:__ '3'__, message:__ *errorMessage*__}__ - `User should be admin to invite friend to private event!`
+
+            __{code:__ '4'__, message:__ *errorMessage*__}__ - `Users must be friends to invite each other to the event!`
+
+            __{code:__ '5'__, message:__ *errorMessage*__}__ - `Friend already has a pending invitation for this event!`
+        
+            __{code:__ '6'__, message:__ *errorMessage*__}__ - `Friend has already joined event!`
+        
+            __{code:__ '7'__, message:__ *errorMessage*__}__ - `Invalid friend right!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+  /users/{userId}/events/{eventId}/acceptInvitation/friends/{friendId}:
+    post:
+      tags:
+      - "events"
+      summary: "Accept friend invitation to the event"
+      operationId: "acceptInvitationFriendEvent"
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+            format: "hex"
+        - name: "eventId"
+          in: "path"
+          description: "ID of the event"
+          required: true
+          schema:
+            type: "string"
+            format: "hex"
+        - name: "friendId"
+          in: "path"
+          description: "ID of the friend"
+          required: true
+          schema:
+            type: "string"
+            format: "hex"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, message:__ *successMessage*__}__ - `Invitation to event has been accepted!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Invalid friend id!`
+
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `Invalid event id!`
+
+            __{code:__ '2'__, message:__ *errorMessage*__}__ - `Cannot accept invitation from yourself!`
+            
+            __{code:__ '3'__, message:__ *errorMessage*__}__ - `There is no pending invitation from this user!"`
+
+            __{code:__ '4'__, message:__ *errorMessage*__}__ - `Cannot add user to private event!`
+        
+            __{code:__ '5'__, message:__ *errorMessage*__}__ - `User has already joined event!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+  /users/{userId}/events/{eventId}/refuseInvitation/friends/{friendId}:
+    delete:
+      tags:
+      - "events"
+      summary: "Refuse friend invitation to the event"
+      operationId: "refuseInvitationFriendEvent"
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+            format: "hex"
+        - name: "eventId"
+          in: "path"
+          description: "ID of the event"
+          required: true
+          schema:
+            type: "string"
+            format: "hex"
+        - name: "friendId"
+          in: "path"
+          description: "ID of the friend"
+          required: true
+          schema:
+            type: "string"
+            format: "hex"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, message:__ *successMessage*__}__ - `Event invitations has been deleted from user notifications!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Invalid friend id!`
+
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `Invalid event id!`
+
+            __{code:__ '2'__, message:__ *errorMessage*__}__ - `No pending invitation from this user to event!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+  /users/{userId}/events/{eventId}/updateParticipantRight/participants/{participantId}:
+    post:
+      tags:
+      - "events"
+      summary: "Update participant right in the event"
+      operationId: "UpdateParticipantRightEvent"
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+            format: "hex"
+        - name: "eventId"
+          in: "path"
+          description: "ID of the event"
+          required: true
+          schema:
+            type: "string"
+            format: "hex"
+        - name: "participantId"
+          in: "path"
+          description: "ID of the participant"
+          required: true
+          schema:
+            type: "string"
+            format: "hex"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                participantRight:
+                  type: string
+                  enum: [guest, superUser, admin]
+                  description: "__'guest':*low priviledge* || 'superUser':*medium priviledge* || 'admin':*high priviledge*__"
+              required:
+                - participantRight
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, message:__ *successMessage*__}__ - `Participant right successfully updated!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Invalid event id!`
+
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `Invalid participant id!`
+
+            __{code:__ '2'__, message:__ *errorMessage*__}__ - `Invalid participant right!`
+            
+            __{code:__ '3'__, message:__ *errorMessage*__}__ - `Cannot change user own right!`
+
+            __{code:__ '4'__, message:__ *errorMessage*__}__ - `User should be admin to change others participants right!`
+        
+            __{code:__ '5'__, message:__ *errorMessage*__}__ - `Participant is not in the event!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+  /users/{userId}/events/{eventId}/deleteParticipant/participants/{participantId}:
+    delete:
+      tags:
+      - "events"
+      summary: "Delete participant from the event"
+      operationId: "DeleteParticipantRightEvent"
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+            format: "hex"
+        - name: "eventId"
+          in: "path"
+          description: "ID of the event"
+          required: true
+          schema:
+            type: "string"
+            format: "hex"
+        - name: "participantId"
+          in: "path"
+          description: "ID of the participant"
+          required: true
+          schema:
+            type: "string"
+            format: "hex"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, message:__ *successMessage*__}__ - `Participant successfully deleted from event!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Invalid event id!`
+
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `Invalid participant id!`
+            
+            __{code:__ '2'__, message:__ *errorMessage*__}__ - `Cannot delete yourself from event!`
+
+            __{code:__ '3'__, message:__ *errorMessage*__}__ - `User should be admin to delete participants from event!`
+
+            __{code:__ '4'__, message:__ *errorMessage*__}__ - `Participant is not in the event!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+  /users/{userId}/events:
+    get:
+      tags:
+      - "events"
+      summary: "Get a list of all user's event"
+      operationId: "GetAllUserEvent"
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+            format: "hex"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, event:__ *arrayOfEventsObject*__}__ - `User events successfully returned!`
+          content:
+           application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  example: "0"
+                event:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Event'
+                  example: [$ref: '#/components/examples/publicEventExample', $ref: '#/components/examples/privateEventExample']
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+      deprecated: true
+  /search:
+    get:
+      tags:
+      - "search"
+      summary: "Gives the result of the research"
+      operationId: "searchGlobal"
+      parameters:
+        - name: "value"
+          in: "query"
+          description: "value of the research"
+          required: false
+          schema:
+            type: "string"
+        - name: "type"
+          in: "query"
+          description: "type to search in ( pseudos, playlists, events )"
+          required: true
+          schema:
+            type: "string"
+        - name: "limit"
+          in: "query"
+          description: "The max number of elements returned"
+          schema:
+            type: "integer"
+        - name: "musicalStyle"
+          in: "query"
+          description: "Musical style of the research"
+          required: false
+          schema:
+            type: "string"
+      responses:
+        200: 
+          description: |
+            `Success - Return the result of the search !`
+        400:
+          description: |
+            __{code:__ '0'__}__ - `Wrong parameter!`
+
+            __{code:__ '2'__}__ - `Type must be specified !`
+
+            __{code:__ '3'__}__ - `Limit must be an integer !`
+
+            __{code:__ '4'__}__ - `This type doesn't exist !`
+        500: 
+          description: |
+           __{code:__ '0'__}__ - `Server error or Unhandled error!`
+      security: []
+  /users/{userId}/searchFriends:
+    get:
+      tags:
+      - "search"
+      summary: "Gives the result of friend research"
+      operationId: "searchFriends"
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+        - name: "value"
+          in: "query"
+          description: "value of the research"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        200: 
+          description: |
+            `Success - Return the result of the search !`
+        400:
+          description: |
+            __{code:__ '0'__}__ - `Wrong parameters!`
+        500: 
+          description: |
+           __{code:__ '0'__}__ - `Server error or Unhandled error!`
+  /users/{userId}/player/switchRandom:
+    post:
+      tags:
+      - "player"
+      summary: "Switch the random button of the player"
+      operationId: "switchRandom"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, message:__ *successMessage*__, random:__ 0__}__ - `Random player set to 'false'!`
+         
+            __{code:__ '1'__, message:__ *successMessage*__, random:__ 1__}__ - `Random player set to 'true'!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Couldn't find the user!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+  /users/{userId}/player/refreshPlayer:
+    post:
+      tags:
+      - "player"
+      summary: "Refresh the tracksURI in the player"
+      operationId: "refreshPlayer"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, tracksId:__ *tracksIdArray*__, index:__ *arrayIndex*__}__ - `Reactualise the context of the playing list'!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `typeId isn't defined!`
+
+            __{code:__ '1'__, message:__ *errorMessage*__}__ - `type must be 'none' or 'event' or 'playlist'!`
+
+            __{code:__ '2'__, message:__ *errorMessage*__}__ - `userId isn't defined!`
+
+            __{code:__ '3'__, message:__ *errorMessage*__}__ - `trackId isn't defined!`
+
+            __{code:__ '4'__, message:__ *errorMessage*__}__ - `Couldn't find the event!`
+
+            __{code:__ '5'__, message:__ *errorMessage*__}__ - `The track ID isn't in this event!`
+
+            __{code:__ '6'__, message:__ *errorMessage*__}__ - `Couldn't find the playlist!`
+
+            __{code:__ '7'__, message:__ *errorMessage*__}__ - `The track ID isn't in this playlist!`
+
+            __{code:__ '8'__, message:__ *errorMessage*__}__ - `Couldn't find the user!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                trackId:
+                  type: string
+                type:
+                  type: string
+                typeId:
+                  type: string
+              required:
+                - trackId
+  /users/{userId}/player/getNextTrack:
+    post:
+      tags:
+      - "player"
+      summary: "Get the next track to play"
+      operationId: "getNextTrack"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, trackId:__ *trackId*__}__ - `Get the next track to play in the playing list'!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Couldn't find the user!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+  /users/{userId}/player/getPreviousTrack:
+    post:
+      tags:
+      - "player"
+      summary: "Get the previous track to play"
+      operationId: "getPreviousTrack"
+      responses:
+        200:
+          description: |
+            __{code:__ '0'__, trackId:__ *trackId*__}__ - `Get the previous track to play in the playing list'!`
+        400:
+          description: |
+            __{code:__ '0'__, message:__ *errorMessage*__}__ - `Couldn't find the user!`
+        401:
+          description: |
+            __{error:__ *authError*__}__ - `Authentification failed, invalid token or userId!`
+        500:
+          description: |
+            __{code:__ '0'__}__ - `Internal error!`
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of the user"
+          required: true
+          schema:
+            type: "string"
+components:
+  schemas:
+    PhysicalEvent:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+        publicFlag:
+          type: boolean
+        votingPrerequisites:
+          type: boolean
+        physicalEvent:
+          type: boolean
+        place:
+          type: string
+        geoLoc:
+          type: object
+          properties:
+            Long:
+              type: number
+              format: float
+            Lat:
+                type: number
+                format: float
+        beginDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        guestsNumber:
+          type: number
+          format: int32
+        guestsInfo:
+          type: array
+          items:
+            type: object
+            properties:
+              _id:
+                type: string
+              userId:
+                type: string
+              right:
+                type: string
+        tracksInfo:
+          type: array
+          items:
+            type: object
+            properties:
+              _id:
+                type: string
+              trackId:
+                type: string
+              votesNumber:
+                type: number
+                format: int32
+    NumericalEvent:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+        publicFlag:
+          type: boolean
+        votingPrerequisites:
+          type: boolean
+        physicalEvent:
+          type: boolean
+        guestsNumber:
+          type: number
+          format: int32
+        guestsInfo:
+          type: array
+          items:
+            type: object
+            properties:
+              _id:
+                type: string
+              userId:
+                type: string
+              right:
+                type: string
+        tracksInfo:
+          type: array
+          items:
+            type: object
+            properties:
+              _id:
+                type: string
+              trackId:
+                type: string
+              votesNumber:
+                type: number
+                format: int32
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+        userInfo:
+          type: object
+          properties:
+            _id:
+              type: string
+            active:
+              type: boolean
+            email:
+              type: string
+              format: email
+            password:
+              type: string
+              format: password
+            firstName:
+              type: string
+            lastName:
+              type: string
+            pseudo:
+              type: string
+            registrationData:
+              type: string
+              format: date-time
+            musicalPreferences:
+              type: array
+              items:
+                type: string
+        userData:
+          type: object
+          properties:
+            _id:
+              type: string
+            playlists:
+              type: array
+              items:
+                type: object
+                properties:
+                  playlist:
+                    type: string
+                  playlistType:
+                    type: number
+            friendsId:
+              type: array
+              items:
+                type: string
+            events:
+              type: array
+              items:
+                type: object
+                properties:
+                  eventsId:
+                    type: string
+                  songIdVotes:
+                    type: array
+                    items:
+                      type: string
+    Tracks:
+      type: object
+      properties:
+        trackId:
+          type: string
+        votesNumber:
+          type: number
+          format: int32
+        userVote:
+          type: boolean
+  examples:
+    TrackExample1:
+      trackId: 60104b6b5bb03207e06857d5
+      votesNumber: 138
+      userVote: true
+    TrackExample2:
+      trackId: 2fba2f1bbc9354fc601014ae
+      votesNumber: 89
+      userVote: false
+    TrackExample3:
+      trackId: 1014aec9352fba2f1bbc604f
+      votesNumber: 44
+      userVote: true
+    TrackExample4:
+      trackId: fba2f3601014ae254fc1bbc9
+      votesNumber: 18
+      userVote: false
+    publicEventExample:
+      geoLoc:
+        Lat: 50.406687
+        Long: 3.756081
+      publicFlag: true
+      votingPrerequisites: true
+      physicalEvent: true
+      status: started
+      guestsNumber: 2
+      _id: 60104b6b5bb03207e06857d5
+      name: Dour Festivale 2021
+      place: Rue d'Elouges, 7370 Dour, Belgique
+      beginDate: 2021-01-25T23:00:00.000+00:00
+      endDate: 2021-01-26T23:00:00.000+00:00
+      guestsInfo:
+        - _id: 60104b6b5bb03207e06857d5
+          userId: 601014ae2fba2f1bbc9354fc
+          right: admin
+        - _id: 60104b6b5bb03207e06857d5
+          userId: 601014ae2fba2f1bbc9354fc
+          right: guest
+      tracksInfo:
+        - _id: 60104b6b5bb03207e06857d5
+          trackId: 601014ae2fba2f1bbc9354fc
+          votesNumber: 12
+        - _id: 60104b6b5bb03207e06857d5
+          trackId: 601014ae2fba2f1bbc9354fc
+          votesNumber: 0
+    privateEventExample:
+      geoLoc:
+        Lat: 48.856832
+        Long: 2.351347
+      publicFlag: false
+      votingPrerequisites: true
+      physicalEvent: true
+      status: notStarted
+      guestsNumber: 2
+      _id: 60104b6b5bb03207e06857d5
+      name: Fête de la musique!
+      place: Place de l'Hotêl de ville Paris 75004
+      beginDate: 2021-06-21T20:00:00.000+00:00
+      endDate: 2021-06-21T23:00:00.000+00:00
+      guestsInfo:
+        - _id: 60104b6b5bb03207e06857d5
+          userId: 601014ae2fba2f1bbc9354fc
+          right: admin
+        - _id: 60104b6b5bb03207e06857d5
+          userId: 601014ae2fba2f1bbc9354fc
+          right: guest
+      tracksInfo:
+        - _id: 60104b6b5bb03207e06857d5
+          trackId: 601014ae2fba2f1bbc9354fc
+          votesNumber: 750
+        - _id: 60104b6b5bb03207e06857d5
+          trackId: 601014ae2fba2f1bbc9354fc
+          votesNumber: 264
+    physicalEventExample:
+      geoLoc:
+        Lat: 50.406687
+        Long: 3.756081
+      publicFlag: true
+      votingPrerequisites: true
+      physicalEvent: true
+      status: terminated
+      guestsNumber: 1
+      _id: 60104b6b5bb03207e06857d5
+      name: Dour Festivale 2021
+      place: Rue d'Elouges, 7370 Dour, Belgique
+      beginDate: 2021-01-25T23:00:00.000+00:00
+      endDate: 2021-01-26T23:00:00.000+00:00
+      guestsInfo:
+        - _id: 0abc6c29b8d8ab0d6023fca2
+          userid: 6023658ba38621d64f2f6df2
+          right: admin
+      tracksInfo: []
+    numericalEventExample:
+      publicFlag: true
+      votingPrerequisites: true
+      physicalEvent: false
+      status: started
+      guestsNumber: 1
+      _id: 60104b6b5bb03207e06857d5
+      name: 2021 en Home office
+      guestsInfo:
+        - _id: 0abc6c29b8d8ab0d6023fca2
+          userid: 6023658ba38621d64f2f6df2
+          right: admin
+      tracksInfo: []
+    userExample:
+      _id: 60104b6b5bb03207e06857d5
+      userInfo:
+        _id: 601014ae2fba2f1bbc9354fc
+        active: true
+        email: nomemailoriginale@musicroom.io
+        password: $2b$10$iXFmPaynUUqdUiRd6B3RW.k8deKJMQO0Tr.CZExmC30t/O8AxfBrC
+        firstName: Jean-Claude
+        lastName: Van Damme
+        pseudo: JCVD
+        registrationDate: 2021-01-25T15:10:32.148+00:00
+        musicalPreferences: 
+          - salsa
+          - rap
+          - soul
+      userData:
+        playlists:
+          - playlist: a2f1bbc9354fc60104b6b5bb03
+            playlistType: 0
+          - playlist: fc60104b6b5bb03a2f1bbc9354
+            playlistType: 2
+          - playlist: 04b6b5bbfc60103a2f1bbc9354
+            playlistType: 1
+        friendsId:
+          - 9354fc6010a2f1bbc93b6b5b
+          - 9356010a93b6010a4fc6010a
+          - 60104b6b5bb03207e06857d5
+        events:
+          - eventsId: 03207e06857d59354fc6010a2
+            songIdVotes:
+            - fc6010aa2f1bbc9354fc60a201
+            - aa2f1bbc9354fc60afc6010201
+          - eventsId: 7d59354fc6010a203207e0685
+            songIdVotes:
+            - bc9354fc60a20135fc10201a0
+            - fc6010aa2f1baa2f1bbc960f4
+            - 7d59354fc6010a203207e06d2
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []
+  

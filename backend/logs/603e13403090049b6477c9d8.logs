@@ -1,0 +1,9 @@
+date=2021-04-22T09:45:55.127Z;deviceModel=Simulator iPhone 12;deviceOSVersion=14.4;musicRoomVersion=1.0;root=http://62.34.5.191:45559/api/me;statusCode=200;message=Ok
+date=2021-04-22T09:45:56.907Z;deviceModel=Simulator iPhone 12;deviceOSVersion=14.4;musicRoomVersion=1.0;root=http://62.34.5.191:45559/api/me/events;statusCode=200;message=Ok
+date=2021-04-22T09:46:12.513Z;deviceModel=Simulator iPhone 12;deviceOSVersion=14.4;musicRoomVersion=1.0;root=http://62.34.5.191:45559/api/me/events;statusCode=200;message=Ok
+date=2021-04-22T09:46:26.667Z;deviceModel=Simulator iPhone 12;deviceOSVersion=14.4;musicRoomVersion=1.0;root=http://62.34.5.191:45559/api/users/603e13403090049b6477c9d8/playlists;statusCode=500;message=Cannot read property 'name' of null
+date=2021-04-22T09:46:28.829Z;deviceModel=Simulator iPhone 12;deviceOSVersion=14.4;musicRoomVersion=1.0;root=http://62.34.5.191:45559/api/me/events;statusCode=200;message=Ok
+date=2021-04-22T10:01:40.706Z;deviceModel=Simulator iPhone 12;deviceOSVersion=14.4;musicRoomVersion=1.0;root=http://62.34.5.191:45559/api/me;statusCode=200;message=Ok
+date=2021-04-22T10:01:43.069Z;deviceModel=Simulator iPhone 12;deviceOSVersion=14.4;musicRoomVersion=1.0;root=http://62.34.5.191:45559/api/users/603e13403090049b6477c9d8/playlists;statusCode=500;message=Cannot read property 'name' of null
+date=2021-04-22T10:01:45.824Z;deviceModel=Simulator iPhone 12;deviceOSVersion=14.4;musicRoomVersion=1.0;root=http://62.34.5.191:45559/api/users/603e13403090049b6477c9d8/playlists;statusCode=500;message=Cannot read property 'name' of null
+date=2021-04-22T10:01:46.915Z;deviceModel=Simulator iPhone 12;deviceOSVersion=14.4;musicRoomVersion=1.0;root=http://62.34.5.191:45559/api/me;statusCode=200;message=Ok

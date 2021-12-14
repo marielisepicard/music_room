@@ -1,0 +1,42 @@
+{
+  "name": "musicroom",
+  "version": "1.0.0",
+  "description": "Music room project - 42",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/42Suricates/MusicRoom.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/42Suricates/MusicRoom/issues"
+  },
+  "homepage": "https://github.com/42Suricates/MusicRoom#readme",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "fs": "^0.0.1-security",
+    "google-auth-library": "^6.1.4",
+    "js-yaml": "^3.14.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.12.5",
+    "mongoose-unique-validator": "^2.0.3",
+    "multer": "^1.4.2",
+    "node-cron": "^3.0.0",
+    "node-fetch": "^2.6.1",
+    "nodemailer": "^6.7.2",
+    "querystring": "^0.2.1",
+    "request": "^2.88.2",
+    "socket.io": "^3.1.2",
+    "swagger-ui-express": "^4.1.6"
+  }
+}

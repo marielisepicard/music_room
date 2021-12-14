@@ -1,0 +1,5 @@
+date=2021-12-14T10:56:50.895Z;deviceModel=Simulator iPhone 11;deviceOSVersion=14.4;musicRoomVersion=1.0;root=http://localhost:45559/api/me;statusCode=200;message=Ok
+date=2021-12-14T10:56:53.329Z;deviceModel=Simulator iPhone 11;deviceOSVersion=14.4;musicRoomVersion=1.0;root=http://localhost:45559/api/users/61b878610b64330828b5a15c/playlists;statusCode=200;message=Ok
+date=2021-12-14T10:56:53.749Z;deviceModel=Simulator iPhone 11;deviceOSVersion=14.4;musicRoomVersion=1.0;root=http://localhost:45559/api/me/events;statusCode=200;message=Ok
+date=2021-12-14T10:56:54.156Z;deviceModel=Simulator iPhone 11;deviceOSVersion=14.4;musicRoomVersion=1.0;root=http://localhost:45559/api/me/discussions;statusCode=200;message=Ok
+date=2021-12-14T10:57:47.228Z;deviceModel=Simulator iPhone 11;deviceOSVersion=14.4;musicRoomVersion=1.0;root=http://localhost:45559/api/me;statusCode=200;message=Ok

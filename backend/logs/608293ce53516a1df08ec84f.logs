@@ -1,0 +1,3 @@
+date=2021-04-23T09:33:59.028Z;deviceModel=iPhone X;deviceOSVersion=14.4.2;musicRoomVersion=1.0;root=http://62.34.5.191:45559/api/me;statusCode=200;message=Ok
+date=2021-04-23T09:34:17.507Z;deviceModel=iPhone X;deviceOSVersion=14.4.2;musicRoomVersion=1.0;root=http://62.34.5.191:45559/api/users/608293ce53516a1df08ec84f;statusCode=500;message=User validation failed: userInfo.email: Error, expected `email` to be unique. Value: `tristanlev@gmail.com`, userInfo: Validation failed: email: Error, expected `email` to be unique. Value: `tristanlev@gmail.com`
+date=2021-04-23T09:35:27.944Z;deviceModel=iPhone X;deviceOSVersion=14.4.2;musicRoomVersion=1.0;root=http://62.34.5.191:45559/api/me;statusCode=200;message=Ok

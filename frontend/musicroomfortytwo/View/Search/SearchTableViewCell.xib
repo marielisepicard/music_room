@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="80" id="KGk-i7-Jjw" customClass="SearchTableViewCell" customModule="musicroomfortytwo" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="K5N-ve-lal">
+                        <rect key="frame" x="5" y="5" width="70" height="70"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="70" id="MPP-YE-azc"/>
+                            <constraint firstAttribute="height" constant="70" id="shR-h4-8Rl"/>
+                        </constraints>
+                    </imageView>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GdU-cJ-gNJ">
+                        <rect key="frame" x="245" y="5" width="70" height="70"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="70" id="WE2-Rd-naY"/>
+                        </constraints>
+                        <color key="tintColor" red="0.097852595149999999" green="0.031579282129999997" blue="0.32551115749999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <state key="normal">
+                            <imageReference key="image" image="plus" catalog="system" symbolScale="large"/>
+                        </state>
+                        <connections>
+                            <action selector="buttonTapped:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="MrI-mP-qaT"/>
+                        </connections>
+                    </button>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nom de la chanson" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zej-eO-vyy">
+                        <rect key="frame" x="80" y="5" width="160" height="70"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="160" id="ucO-I6-57A"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="AvenirNext-Bold" family="Avenir Next" pointSize="10"/>
+                        <color key="textColor" red="0.097852595149999999" green="0.031579282129999997" blue="0.32551115749999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="Zej-eO-vyy" firstAttribute="leading" secondItem="K5N-ve-lal" secondAttribute="trailing" constant="5" id="333-Km-ZFg"/>
+                    <constraint firstItem="K5N-ve-lal" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="89h-cr-SBv"/>
+                    <constraint firstItem="GdU-cJ-gNJ" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="DL6-iT-zlY"/>
+                    <constraint firstItem="K5N-ve-lal" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="5" id="OXP-nE-i8N"/>
+                    <constraint firstItem="GdU-cJ-gNJ" firstAttribute="leading" secondItem="Zej-eO-vyy" secondAttribute="trailing" constant="5" id="Qkm-ee-uke"/>
+                    <constraint firstItem="GdU-cJ-gNJ" firstAttribute="leading" secondItem="Zej-eO-vyy" secondAttribute="trailing" constant="5" id="S1j-8q-rMu"/>
+                    <constraint firstAttribute="bottom" secondItem="GdU-cJ-gNJ" secondAttribute="bottom" constant="5" id="eWs-rw-8bf"/>
+                    <constraint firstItem="Zej-eO-vyy" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="hHu-uB-8FE"/>
+                    <constraint firstAttribute="bottom" secondItem="K5N-ve-lal" secondAttribute="bottom" constant="5" id="lLo-6W-ZxD"/>
+                    <constraint firstAttribute="bottom" secondItem="Zej-eO-vyy" secondAttribute="bottom" constant="5" id="oY2-Zp-NZr"/>
+                    <constraint firstAttribute="trailing" secondItem="GdU-cJ-gNJ" secondAttribute="trailing" constant="5" id="rWv-Gx-lUn"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="button" destination="GdU-cJ-gNJ" id="NSn-8p-A0q"/>
+                <outlet property="trackCell" destination="H2p-sc-9uM" id="jlU-xB-fvY"/>
+                <outlet property="trackImage" destination="K5N-ve-lal" id="BTq-Je-3Va"/>
+                <outlet property="trackTitle" destination="Zej-eO-vyy" id="aez-V1-qq4"/>
+            </connections>
+            <point key="canvasLocation" x="137.68115942028987" y="83.705357142857139"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="plus" catalog="system" width="128" height="113"/>
+    </resources>
+</document>
