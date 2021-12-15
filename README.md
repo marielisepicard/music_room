@@ -28,6 +28,27 @@ on their own, at work, at home or walking on the street, **earphones into ears**
 
 🗣**Chat**: to talk with your friends
 
+   
+
+   
+  
+
+<p align="center">
+    <img src="https://github.com/marielisepicard/music_room/blob/main/assets/add-track.gif?raw=true" width=40% height=40%>
+   <img src="https://github.com/marielisepicard/music_room/blob/main/assets/follow-playlist.gif?raw=true" width=40% height=40%>
+</p>
+<p align="center">
+  <img src="https://github.com/marielisepicard/music_room/blob/main/assets/add-friend.gif?raw=true" width=40% height=40%>
+    <img src="https://github.com/marielisepicard/music_room/blob/main/assets/accept-friend.gif?raw=true" width=40% height=40%>
+</p>
+<p align="center">
+   <img src="https://github.com/marielisepicard/music_room/blob/main/assets/accept-event.gif?raw=true" width=40% height=40%>
+    <img src="https://github.com/marielisepicard/music_room/blob/main/assets/vote.gif?raw=true" width=40% height=40%>
+</p>
+<p align="center">
+   <img src="https://github.com/marielisepicard/music_room/blob/main/assets/send-message.gif?raw=true" width=40% height=40%>
+</p>
+
 ## Technical features:
 
  - 📲 **Real-time** application
@@ -54,7 +75,7 @@ on their own, at work, at home or walking on the street, **earphones into ears**
 ## Test the app: 
  👀 **To see a demo**
 
-check this video
+download this [video](https://github.com/marielisepicard/music_room/blob/main/assets/MusicRoomDemo.mp4)
 
 🧑🏽‍💻 **Launch the project** 
 
